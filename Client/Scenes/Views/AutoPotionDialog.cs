@@ -321,7 +321,7 @@ namespace Client.Scenes.Views
             {
                 Parent = this,
                 IsControl = false,
-                Text = "Health:"
+                Text = string.Format(CEnvir.Language.Health) + ";"
             };
             HealthLabel.Location = new Point(HealthTargetBox.Location.X - HealthLabel.Size.Width, HealthTargetBox.Location.Y + (HealthTargetBox.Size.Height - HealthLabel.Size.Height) / 2);
 
@@ -330,13 +330,13 @@ namespace Client.Scenes.Views
             {
                 Parent = this,
                 IsControl = false,
-                Text = "Mana:"
+                Text = Text = string.Format(CEnvir.Language.Mana) + ":"
             };
             ManaLabel.Location = new Point(ManaTargetBox.Location.X - ManaLabel.Size.Width, ManaTargetBox.Location.Y + (ManaTargetBox.Size.Height - ManaLabel.Size.Height) / 2);
             
             EnabledCheckBox = new DXCheckBox
             {
-                Label = {Text =  "Enabled"},
+                Label = {Text = Text = string.Format(CEnvir.Language.Enabled) },
                 Parent = this,
             };
             EnabledCheckBox.CheckedChanged += (o, e) => SendUpdate();

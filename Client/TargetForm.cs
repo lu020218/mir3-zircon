@@ -22,21 +22,22 @@ namespace Client
     public sealed class TargetForm : RenderForm
     {
         public bool Resizing { get; private set; }
-        public TargetForm() : base("Zircon Client")
+        public TargetForm() : base("吾爱传奇")
         {
-            AutoScaleMode = AutoScaleMode.None;
+            AutoScaleMode = AutoScaleMode.None; //自动缩放模式
 
-            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleDimensions = new SizeF(96F, 96F);  //自动缩放尺寸
 
-            ClientSize = new Size(1024, 768);
+            ClientSize = new Size(1024, 768);   //客户端大小
             
             Icon = Properties.Resources.Zircon;
             
-            FormBorderStyle = (Config.FullScreen || Config.Borderless) ? FormBorderStyle.None : FormBorderStyle.FixedSingle;
+            FormBorderStyle = (Config.FullScreen || Config.Borderless) ? FormBorderStyle.None : FormBorderStyle.FixedSingle;    //边框样式
 
             MaximizeBox = false;
         }
 
+        //Deactivate - 停用
         protected override void OnDeactivate(EventArgs e)
         {
             if (GameScene.Game != null)
@@ -47,6 +48,7 @@ namespace Client
             CEnvir.Ctrl = false;
         }
 
+        //鼠标移动事件处理函数
         protected override void OnMouseMove(MouseEventArgs e)
         {
             //TODO Move to other locations instead?
@@ -66,6 +68,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //鼠标按下事件处理函数
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (GameScene.Game != null && e.Button == MouseButtons.Right && (GameScene.Game.SelectedCell != null || GameScene.Game.GoldPickedUp))
@@ -99,6 +103,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //鼠标单击事件处理函数
         protected override void OnMouseClick(MouseEventArgs e)
         {
             try
@@ -110,6 +116,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //鼠标双击事件处理函数
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             try
@@ -121,6 +129,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //鼠标滚轮事件处理函数
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             try
@@ -129,10 +139,11 @@ namespace Client
             }
             catch (Exception ex)
             {
-                CEnvir.SaveException(ex);
+                CEnvir.SaveError(ex.ToString());
             }
         }
 
+        //按键按下处理函数
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -157,6 +168,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //按键弹起处理函数
         protected override void OnKeyUp(KeyEventArgs e)
         {
             CEnvir.Shift = e.Shift;
@@ -176,6 +189,8 @@ namespace Client
                 CEnvir.SaveException(ex);
             }
         }
+
+        //按键处理函数
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             try

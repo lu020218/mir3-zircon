@@ -49,8 +49,11 @@ namespace Client
                 CEnvir.LibraryList[pair.Key] = new MirLibrary(@".\" + pair.Value);
             }
 
-            CEnvir.LoadDatabase();
 
+            ConfigReader.Load();
+            
+            CEnvir.LoadDatabase();
+            CEnvir.LoadLanguage();
             CEnvir.Target = new TargetForm();
             DXManager.Create();
             DXSoundManager.Create();
@@ -59,7 +62,7 @@ namespace Client
 
             MessagePump.Run(CEnvir.Target, CEnvir.GameLoop);
 
-
+            ConfigReader.Save();
 
             CEnvir.Session?.Save(true);
             CEnvir.Unload();

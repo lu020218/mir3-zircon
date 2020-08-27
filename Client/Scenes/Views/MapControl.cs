@@ -1426,21 +1426,25 @@ namespace Client.Scenes.Views
 
             public void UpdateLights()
             {
-                switch (GameScene.Game.MapControl.MapInfo.Light)
-                {
-                    case LightSetting.Default:
-                        byte shading = (byte) (255*GameScene.Game.DayTime);
-                        BackColour = Color.FromArgb(shading, shading, shading);
-                        Visible = true;
-                        break;
-                    case LightSetting.Night:
-                        BackColour = Color.FromArgb(15, 15, 15);
-                        Visible = true;
-                        break;
-                    case LightSetting.Light:
-                        Visible = MapObject.User != null && (MapObject.User.Poison & PoisonType.Abyss) != PoisonType.Abyss;
-                        break;
-                }
+                //免蜡修改
+                BackColour = Color.FromArgb(255, 255, 255);
+                Visible = true;
+
+                //switch (GameScene.Game.MapControl.MapInfo.Light)
+                //{
+                //    case LightSetting.Default:
+                //        byte shading = (byte) (255*GameScene.Game.DayTime);
+                //        BackColour = Color.FromArgb(shading, shading, shading);
+                //        Visible = true;
+                //        break;
+                //    case LightSetting.Night:
+                //        BackColour = Color.FromArgb(15, 15, 15);
+                //        Visible = true;
+                //        break;
+                //    case LightSetting.Light:
+                //        Visible = MapObject.User != null && (MapObject.User.Poison & PoisonType.Abyss) != PoisonType.Abyss;
+                //        break;
+                //}
 
             }
             protected override void DrawControl()

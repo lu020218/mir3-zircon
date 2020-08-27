@@ -595,7 +595,7 @@ namespace Client.Scenes
             public LoginDialog()
             {
                 Size = new Size(300, 250);
-                TitleLabel.Text = "Login";
+                TitleLabel.Text = string.Format(CEnvir.Language.Login);
                 Visible = false;
 
                 EMailTextBox = new DXTextBox
@@ -625,14 +625,14 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "E-Mail:",
+                    Text = string.Format(CEnvir.Language.Account),
                 };
                 label.Location = new Point(EMailTextBox.Location.X - label.Size.Width - 5, (EMailTextBox.Size.Height - label.Size.Height) / 2 + EMailTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Password:",
+                    Text = string.Format(CEnvir.Language.Password),
                 };
                 label.Location = new Point(PasswordTextBox.Location.X - label.Size.Width - 5, (PasswordTextBox.Size.Height - label.Size.Height) / 2 + PasswordTextBox.Location.Y);
 
@@ -641,7 +641,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.EMailHelp, Globals.MaxEMailLength),//"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 EMailHelpLabel.Location = new Point(EMailTextBox.Location.X + EMailTextBox.Size.Width + 2, (EMailTextBox.Size.Height - EMailHelpLabel.Size.Height) / 2 + EMailTextBox.Location.Y);
 
@@ -650,14 +650,14 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters:Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),//$"Password.\nAccepted characters:Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 PasswordHelpLabel.Location = new Point(PasswordTextBox.Location.X + PasswordTextBox.Size.Width + 2, (PasswordTextBox.Size.Height - PasswordHelpLabel.Size.Height) / 2 + PasswordTextBox.Location.Y);
 
 
                 RememberCheckBox = new DXCheckBox
                 {
-                    Label = { Text = "Remember Details?" },
+                    Label = { Text = string.Format(CEnvir.Language.Remember) },
                     Parent = this,
                     Checked = Config.RememberDetails,
                 };
@@ -669,7 +669,7 @@ namespace Client.Scenes
                     Parent = this,
                     Location = new Point(85, 120),
                     Size = new Size(180, DefaultHeight),
-                    Label = { Text = "Log in" },
+                    Label = { Text = string.Format(CEnvir.Language.LoginBtn) },
                     Enabled = false,
                 };
                 LoginButton.MouseClick += (o, e) => Login();
@@ -679,14 +679,14 @@ namespace Client.Scenes
                     Parent = this,
                     Location = new Point(85, 150),
                     Size = new Size(180, DefaultHeight),
-                    Label = { Text = "Change Password" },
+                    Label = { Text = string.Format(CEnvir.Language.ChangePassword) },
                 };
                 ChangePasswordButton.MouseClick += ChangePasswordButton_MouseClick;
 
                 ForgotPasswordLabel = new DXLabel()
                 {
                     Parent = this,
-                    Text = "Forgot Password?",
+                    Text = string.Format(CEnvir.Language.ForgotPassword),
                     Sound = SoundIndex.ButtonC,
                 };
                 ForgotPasswordLabel.MouseEnter += (o, e) => ForgotPasswordLabel.ForeColour = Color.White;
@@ -699,7 +699,7 @@ namespace Client.Scenes
                     Parent = this,
                     Location = new Point(85, 210),
                     Size = new Size(180, DefaultHeight),
-                    Label = { Text = "New Account" },
+                    Label = { Text = string.Format(CEnvir.Language.NewAccount) },
                 };
                 NewAccountButton.MouseClick += NewAccountButton_MouseClick;
                 CloseButton.MouseClick += (o, e) => CEnvir.Target.Close();
@@ -1087,14 +1087,14 @@ namespace Client.Scenes
             public NewAccountDialog()
             {
                 Size = new Size(300, 255);
-                TitleLabel.Text = "Account Creation";
+                TitleLabel.Text = string.Format(CEnvir.Language.AccountCreation);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -1105,7 +1105,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Create" },
+                    Label = { Text = string.Format(CEnvir.Language.Create) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -1192,35 +1192,35 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "E-Mail:",
+                    Text = string.Format(CEnvir.Language.EMail),
                 };
                 label.Location = new Point(EMailTextBox.Location.X - label.Size.Width - 5, (EMailTextBox.Size.Height - label.Size.Height) / 2 + EMailTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Password:",
+                    Text = string.Format(CEnvir.Language.Password),
                 };
                 label.Location = new Point(Password1TextBox.Location.X - label.Size.Width - 5, (Password1TextBox.Size.Height - label.Size.Height) / 2 + Password1TextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Password:",
+                    Text = string.Format(CEnvir.Language.Password),
                 };
                 label.Location = new Point(Password2TextBox.Location.X - label.Size.Width - 5, (Password2TextBox.Size.Height - label.Size.Height) / 2 + Password2TextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Real Name:",
+                    Text = string.Format(CEnvir.Language.RealName),
                 };
                 label.Location = new Point(RealNameTextBox.Location.X - label.Size.Width - 5, (RealNameTextBox.Size.Height - label.Size.Height) / 2 + RealNameTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Birth Date:",
+                    Text = string.Format(CEnvir.Language.BirthDate),
                 };
                 label.Location = new Point(BirthDateTextBox.Location.X - label.Size.Width - 5, (BirthDateTextBox.Size.Height - label.Size.Height) / 2 + BirthDateTextBox.Location.Y);
 
@@ -1228,7 +1228,7 @@ namespace Client.Scenes
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Referral:",
+                    Text = string.Format(CEnvir.Language.Referral),
                 };
                 label.Location = new Point(ReferralTextBox.Location.X - label.Size.Width - 5, (ReferralTextBox.Size.Height - label.Size.Height) / 2 + ReferralTextBox.Location.Y);
 
@@ -1238,7 +1238,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.ReferralHelp, Globals.MaxEMailLength)//$"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 EMailHelpLabel.Location = new Point(EMailTextBox.Location.X + EMailTextBox.Size.Width + 2, (EMailTextBox.Size.Height - EMailHelpLabel.Size.Height) / 2 + EMailTextBox.Location.Y);
 
@@ -1247,7 +1247,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),//$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 Password1HelpLabel.Location = new Point(Password1TextBox.Location.X + Password1TextBox.Size.Width + 2, (Password1TextBox.Size.Height - Password1HelpLabel.Size.Height) / 2 + Password1TextBox.Location.Y);
 
@@ -1256,7 +1256,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),//$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 Password2HelpLabel.Location = new Point(Password2TextBox.Location.X + Password2TextBox.Size.Width + 2, (Password2TextBox.Size.Height - Password2HelpLabel.Size.Height) / 2 + Password2TextBox.Location.Y);
 
@@ -1266,7 +1266,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Real Name.\nAccepted characters: All.\nLength: between {Globals.MinRealNameLength} and {Globals.MaxRealNameLength} characters.\nRequired: {Globals.RealNameRequired}",
+                    Hint = string.Format(CEnvir.Language.RealNameHelp, Globals.MinRealNameLength, Globals.MaxRealNameLength, Globals.RealNameRequired),//$"Real Name.\nAccepted characters: All.\nLength: between {Globals.MinRealNameLength} and {Globals.MaxRealNameLength} characters.\nRequired: {Globals.RealNameRequired}",
                 };
                 RealNameHelpLabel.Location = new Point(RealNameTextBox.Location.X + RealNameTextBox.Size.Width + 2, (RealNameTextBox.Size.Height - RealNameHelpLabel.Size.Height) / 2 + RealNameTextBox.Location.Y);
 
@@ -1275,7 +1275,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Birth Date.\nFormat: {Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()}.\nRequired: {Globals.BirthDateRequired}",
+                    Hint = string.Format(CEnvir.Language.BirthDateHelp, Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(), Globals.BirthDateRequired),//$"Birth Date.\nFormat: {Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper()}.\nRequired: {Globals.BirthDateRequired}",
                 };
                 BirthDateHelpLabel.Location = new Point(BirthDateTextBox.Location.X + BirthDateTextBox.Size.Width + 2, (BirthDateTextBox.Size.Height - BirthDateHelpLabel.Size.Height) / 2 + BirthDateTextBox.Location.Y);
 
@@ -1284,7 +1284,7 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address of the person who referred you.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.ReferralHelp, Globals.MaxEMailLength),//$"E-Mail Address of the person who referred you.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 ReferralHelpLabel.Location = new Point(ReferralTextBox.Location.X + ReferralTextBox.Size.Width + 2, (ReferralTextBox.Size.Height - ReferralHelpLabel.Size.Height) / 2 + ReferralTextBox.Location.Y);
 
@@ -1727,14 +1727,14 @@ namespace Client.Scenes
             public ChangePasswordDialog()
             {
                 Size = new Size(330, 205);
-                TitleLabel.Text = "Change Password";
+                TitleLabel.Text = string.Format(CEnvir.Language.ChangePassword);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -1745,7 +1745,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Change" },
+                    Label = { Text = string.Format(CEnvir.Language.Change) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -1807,28 +1807,28 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "E-Mail:",
+                    Text = string.Format(CEnvir.Language.EMail),
                 };
                 label.Location = new Point(EMailTextBox.Location.X - label.Size.Width - 5, (EMailTextBox.Size.Height - label.Size.Height) / 2 + EMailTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Current Password:",
+                    Text = string.Format(CEnvir.Language.CurrentPassword),
                 };
                 label.Location = new Point(CurrentPasswordTextBox.Location.X - label.Size.Width - 5, (CurrentPasswordTextBox.Size.Height - label.Size.Height) / 2 + CurrentPasswordTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "New Password:",
+                    Text = string.Format(CEnvir.Language.NewPassword),
                 };
                 label.Location = new Point(NewPassword1TextBox.Location.X - label.Size.Width - 5, (NewPassword1TextBox.Size.Height - label.Size.Height) / 2 + NewPassword1TextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "New Password:",
+                    Text = string.Format(CEnvir.Language.NewPassword),
                 };
                 label.Location = new Point(NewPassword2TextBox.Location.X - label.Size.Width - 5, (NewPassword2TextBox.Size.Height - label.Size.Height) / 2 + NewPassword2TextBox.Location.Y);
 
@@ -1838,7 +1838,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.EMailHelp, Globals.MaxEMailLength),
+                    //$"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 EMailHelpLabel.Location = new Point(EMailTextBox.Location.X + EMailTextBox.Size.Width + 2, (EMailTextBox.Size.Height - EMailHelpLabel.Size.Height) / 2 + EMailTextBox.Location.Y);
 
@@ -1847,7 +1848,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),
+                    //$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 CurrentPasswordHelpLabel.Location = new Point(CurrentPasswordTextBox.Location.X + CurrentPasswordTextBox.Size.Width + 2, (CurrentPasswordTextBox.Size.Height - CurrentPasswordHelpLabel.Size.Height) / 2 + CurrentPasswordTextBox.Location.Y);
 
@@ -1856,7 +1858,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters:Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),
+                    //$"Password.\nAccepted characters:Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 NewPassword1HelpLabel.Location = new Point(NewPassword1TextBox.Location.X + NewPassword1TextBox.Size.Width + 2, (NewPassword1TextBox.Size.Height - NewPassword1HelpLabel.Size.Height) / 2 + NewPassword1TextBox.Location.Y);
 
@@ -1865,7 +1868,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),
+                    //$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 NewPassword2HelpLabel.Location = new Point(NewPassword2TextBox.Location.X + NewPassword2TextBox.Size.Width + 2, (NewPassword2TextBox.Size.Height - NewPassword2HelpLabel.Size.Height) / 2 + NewPassword2TextBox.Location.Y);
 
@@ -2160,14 +2164,14 @@ namespace Client.Scenes
             public RequestResetPasswordDialog()
             {
                 Size = new Size(330, 150);
-                TitleLabel.Text = "Request Password Reset";
+                TitleLabel.Text = string.Format(CEnvir.Language.RequestPasswordReset);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2178,7 +2182,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Request" },
+                    Label = { Text = string.Format(CEnvir.Language.Request) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2201,7 +2205,7 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "E-Mail:",
+                    Text = string.Format(CEnvir.Language.EMail),
                 };
                 label.Location = new Point(EMailTextBox.Location.X - label.Size.Width - 5, (EMailTextBox.Size.Height - label.Size.Height) / 2 + EMailTextBox.Location.Y);
 
@@ -2210,14 +2214,15 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.EMailHelp, Globals.MaxEMailLength),
+                    //$"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 EMailHelpLabel.Location = new Point(EMailTextBox.Location.X + EMailTextBox.Size.Width + 2, (EMailTextBox.Size.Height - EMailHelpLabel.Size.Height) / 2 + EMailTextBox.Location.Y);
 
                 HaveKeyLabel = new DXLabel
                 {
                     Parent = this,
-                    Text = "Have Reset Key?",
+                    Text = string.Format(CEnvir.Language.HaveResetKey),
                 };
                 HaveKeyLabel.MouseEnter += (o, e) => HaveKeyLabel.ForeColour = Color.White;
                 HaveKeyLabel.MouseLeave += (o, e) => HaveKeyLabel.ForeColour = Color.FromArgb(198, 166, 99);
@@ -2476,14 +2481,14 @@ namespace Client.Scenes
             public ResetPasswordDialog()
             {
                 Size = new Size(330, 180);
-                TitleLabel.Text = "Reset Password";
+                TitleLabel.Text = string.Format(CEnvir.Language.ResetPassword);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2494,7 +2499,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Reset" },
+                    Label = { Text = string.Format(CEnvir.Language.Reset) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2543,21 +2548,21 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Reset Key:",
+                    Text = string.Format(CEnvir.Language.ResetKey),
                 };
                 label.Location = new Point(ResetKeyTextBox.Location.X - label.Size.Width - 5, (ResetKeyTextBox.Size.Height - label.Size.Height) / 2 + ResetKeyTextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "New Password:",
+                    Text = string.Format(CEnvir.Language.NewPassword),
                 };
                 label.Location = new Point(NewPassword1TextBox.Location.X - label.Size.Width - 5, (NewPassword1TextBox.Size.Height - label.Size.Height) / 2 + NewPassword1TextBox.Location.Y);
 
                 label = new DXLabel
                 {
                     Parent = this,
-                    Text = "New Password:",
+                    Text = string.Format(CEnvir.Language.NewPassword),
                 };
                 label.Location = new Point(NewPassword2TextBox.Location.X - label.Size.Width - 5, (NewPassword2TextBox.Size.Height - label.Size.Height) / 2 + NewPassword2TextBox.Location.Y);
 
@@ -2567,7 +2572,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Reset Key.\nRandom series of numbers and letters found in the password reset E-Mail.\nCase Sensetive.",
+                    Hint = string.Format(CEnvir.Language.ResetHelp),
+                    //$"Reset Key.\nRandom series of numbers and letters found in the password reset E-Mail.\nCase Sensetive.",
                 };
                 ResetHelpLabel.Location = new Point(ResetKeyTextBox.Location.X + ResetKeyTextBox.Size.Width + 2, (ResetKeyTextBox.Size.Height - ResetHelpLabel.Size.Height) / 2 + ResetKeyTextBox.Location.Y);
 
@@ -2576,7 +2582,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),
+                    //$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 NewPassword1HelpLabel.Location = new Point(NewPassword1TextBox.Location.X + NewPassword1TextBox.Size.Width + 2, (NewPassword1TextBox.Size.Height - NewPassword1HelpLabel.Size.Height) / 2 + NewPassword1TextBox.Location.Y);
 
@@ -2585,7 +2592,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
+                    Hint = string.Format(CEnvir.Language.PasswordHelp, Globals.MinPasswordLength, Globals.MaxPasswordLength),
+                    //$"Password.\nAccepted characters: Any non-white space character.\nLength: between {Globals.MinPasswordLength} and {Globals.MaxPasswordLength} characters.",
                 };
                 NewPassword2HelpLabel.Location = new Point(NewPassword2TextBox.Location.X + NewPassword2TextBox.Size.Width + 2, (NewPassword2TextBox.Size.Height - NewPassword2HelpLabel.Size.Height) / 2 + NewPassword2TextBox.Location.Y);
 
@@ -2841,14 +2849,14 @@ namespace Client.Scenes
             public ActivationDialog()
             {
                 Size = new Size(330, 155);
-                TitleLabel.Text = "Account Activation";
+                TitleLabel.Text = string.Format(CEnvir.Language.AccountActivation);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2859,7 +2867,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Activate" },
+                    Label = { Text = string.Format(CEnvir.Language.Activate) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -2882,7 +2890,7 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "Activation Key::",
+                    Text = string.Format(CEnvir.Language.ActivationKey),
                 };
                 label.Location = new Point(ActivationKeyTextBox.Location.X - label.Size.Width - 5, (ActivationKeyTextBox.Size.Height - label.Size.Height) / 2 + ActivationKeyTextBox.Location.Y);
 
@@ -2891,14 +2899,15 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"Activation Key.\nRandom series of numbers and letters found in the activation E-Mail.\nCase Sensetive.",
+                    Hint = string.Format(CEnvir.Language.ActivationHelp),
+                    //$"Activation Key.\nRandom series of numbers and letters found in the activation E-Mail.\nCase Sensetive.",
                 };
                 ActivationHelpLabel.Location = new Point(ActivationKeyTextBox.Location.X + ActivationKeyTextBox.Size.Width + 2, (ActivationKeyTextBox.Size.Height - ActivationHelpLabel.Size.Height) / 2 + ActivationKeyTextBox.Location.Y);
 
                 ResendLabel = new DXLabel
                 {
                     Parent = this,
-                    Text = "Not received E-Mail?",
+                    Text = string.Format(CEnvir.Language.EMailResend),
                 };
                 ResendLabel.MouseEnter += (o, e) => ResendLabel.ForeColour = Color.White;
                 ResendLabel.MouseLeave += (o, e) => ResendLabel.ForeColour = Color.FromArgb(198, 166, 99);
@@ -3106,14 +3115,14 @@ namespace Client.Scenes
             public RequestActivationKeyDialog()
             {
                 Size = new Size(330, 130);
-                TitleLabel.Text = "Request Activation Key";
+                TitleLabel.Text = string.Format(CEnvir.Language.RequestActivationKey);
                 HasFooter = true;
                 Visible = false;
 
                 CancelButton = new DXButton
                 {
                     Parent = this,
-                    Label = { Text = "Cancel" },
+                    Label = { Text = string.Format(CEnvir.Language.Cancel) },
                     Location = new Point(Size.Width / 2 + 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -3124,7 +3133,7 @@ namespace Client.Scenes
                 {
                     Enabled = false,
                     Parent = this,
-                    Label = { Text = "Request" },
+                    Label = { Text = string.Format(CEnvir.Language.Request) },
                     Location = new Point((Size.Width) / 2 - 80 - 10, Size.Height - 43),
                     Size = new Size(80, DefaultHeight),
                 };
@@ -3148,7 +3157,7 @@ namespace Client.Scenes
                 DXLabel label = new DXLabel
                 {
                     Parent = this,
-                    Text = "E-Mail:",
+                    Text = string.Format(CEnvir.Language.EMail),
                 };
                 label.Location = new Point(EMailTextBox.Location.X - label.Size.Width - 5, (EMailTextBox.Size.Height - label.Size.Height) / 2 + EMailTextBox.Location.Y);
 
@@ -3157,7 +3166,8 @@ namespace Client.Scenes
                     Visible = false,
                     Parent = this,
                     Text = "[?]",
-                    Hint = $"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
+                    Hint = string.Format(CEnvir.Language.EMailHelp, Globals.MaxEMailLength),
+                    //$"E-Mail Address.\nFormat: Example@Example.Com.\nMax Length: {Globals.MaxEMailLength} characters.",
                 };
                 EMailHelpLabel.Location = new Point(EMailTextBox.Location.X + EMailTextBox.Size.Width + 2, (EMailTextBox.Size.Height - EMailHelpLabel.Size.Height) / 2 + EMailTextBox.Location.Y);
             }
