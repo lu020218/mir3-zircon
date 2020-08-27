@@ -50,7 +50,7 @@ namespace Client
             }
 
 
-            ConfigReader.Load();
+            //ConfigReader.Load();
             
             CEnvir.LoadDatabase();
             CEnvir.LoadLanguage();
@@ -62,7 +62,7 @@ namespace Client
 
             MessagePump.Run(CEnvir.Target, CEnvir.GameLoop);
 
-            ConfigReader.Save();
+            //ConfigReader.Save();
 
             CEnvir.Session?.Save(true);
             CEnvir.Unload();

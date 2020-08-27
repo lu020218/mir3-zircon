@@ -96,5 +96,12 @@ namespace Client.Envir.Translations
         public override string Apply { get; set; } = "Apply";
         public override string Exit { get; set; } = "Exit";
 
+        public override string AssistSet { get; set; } = "AssistSetting";
+        public override string AutoPotion { get; set; } = "Auto Potion";
+        public override string CombatAssist { get; set; } = "Combat Assist";
+        public override string Health { get; set; } = "Health";
+        public override string Mana { get; set; } = "Mana";
+        public override string Enabled { get; set; } = "Enabled";
+        public override string AutomaticSkill { get; set; } = "Automatic Skill";
     }
 }
