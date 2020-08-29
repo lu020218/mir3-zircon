@@ -61,7 +61,82 @@ namespace Server.Views
             }
 
             if (oValue == null || MapRegion.Map != oValue.Map)
-                Map.Load(MapRegion.Map.FileName);
+            {
+                byte[] Bytes;
+                string filepath = Config.MapPath + MapRegion.Map.FileName + ".map";
+                if (File.Exists(filepath))
+                {
+                    Bytes = File.ReadAllBytes(filepath);
+                }
+                else
+                {
+                    return;
+                }
+                if ((Bytes[2] == 0x43) && (Bytes[3] == 0x23))
+                {
+                    //LoadMapType100();
+                    Map.LoadMapType7(MapRegion.Map.FileName);
+                    return;
+                }
+
+                //wemade mir3 maps have no title they just start with blank bytes
+                if (Bytes[0] == 0)
+                {
+                    //LoadMapType5();
+                    Map.LoadMapTypeDefault(MapRegion.Map.FileName);
+                    return;
+                }
+                //shanda mir3 maps start with title: (C) SNDA, MIR3.
+                if ((Bytes[0] == 0x0F) && (Bytes[5] == 0x53) && (Bytes[14] == 0x33))
+                {
+                    //LoadMapType6();
+                    Map.LoadMapType5(MapRegion.Map.FileName);
+                    return;
+                }
+                //wemades antihack map (laby maps) title start with: Mir2 AntiHack
+                if ((Bytes[0] == 0x15) && (Bytes[4] == 0x32) && (Bytes[6] == 0x41) && (Bytes[19] == 0x31))
+                {
+                    //LoadMapType4();
+                    Map.LoadMapType4(MapRegion.Map.FileName);
+                    return;
+                }
+                //wemades 2010 map format i guess title starts with: Map 2010 Ver 1.0
+                if ((Bytes[0] == 0x10) && (Bytes[2] == 0x61) && (Bytes[7] == 0x31) && (Bytes[14] == 0x31))
+                {
+                    //LoadMapType1();
+                    Map.LoadMapType1(MapRegion.Map.FileName);
+                    return;
+                }
+                //shanda's 2012 format and one of shandas(wemades) older formats share same header info, only difference is the filesize
+                if ((Bytes[4] == 0x0F) && (Bytes[18] == 0x0D) && (Bytes[19] == 0x0A))
+                {
+                    int W = Bytes[0] + (Bytes[1] << 8);
+                    int H = Bytes[2] + (Bytes[3] << 8);
+                    if (Bytes.Length > (52 + (W * H * 14)))
+                    {
+                        //LoadMapType3();
+                        Map.LoadMapType3(MapRegion.Map.FileName);
+                        return;
+                    }
+                    else
+                    {
+                        //LoadMapType2();
+                        Map.LoadMapType2(MapRegion.Map.FileName);
+                        return;
+                    }
+                }
+
+                //3/4 heroes map format (myth/lifcos i guess)
+                if ((Bytes[0] == 0x0D) && (Bytes[1] == 0x4C) && (Bytes[7] == 0x20) && (Bytes[11] == 0x6D))
+                {
+                    //LoadMapType7();
+                    Map.LoadMapType6(MapRegion.Map.FileName);
+                    return;
+                }
+                //if it's none of the above load the default old school format
+                //LoadMapType0();
+                Map.LoadMapType8(MapRegion.Map.FileName);
+            }
 
             Map.Selection = MapRegion.GetPoints(Map.Width);
 
@@ -352,7 +427,7 @@ namespace Server.Views.DirectX
             Graphics = Graphics.FromHwnd(IntPtr.Zero);
             ConfigureGraphics(Graphics);
 
-            
+            //检查Zl文件是否存在
             foreach (KeyValuePair<LibraryFile, string> pair in Libraries.LibraryList)
             {
                 if (!File.Exists(Path.Combine(Config.ClientPath, pair.Value))) continue;
@@ -1972,7 +2047,408 @@ namespace Server.Views.DirectX
             Manager.Sprite.Transform = Matrix.Identity;
         }
 
-        public void Load(string fileName)
+        public void LoadMapType1(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    mStream.Seek(21, SeekOrigin.Begin);
+                    int w = reader.ReadInt16();
+                    int xor = reader.ReadInt16();
+                    int h = reader.ReadInt16();
+                    Width = w ^ xor;
+                    Height = h ^ xor;
+
+                    mStream.Seek(52, SeekOrigin.Begin);
+                    Cells = new Cell[Width, Height];
+
+                    for (int x = 0; x < Width; x++)
+                    {
+                        for (int y = 0; y < Height; y++)
+                        {
+                            Cells[x, y] = new Cell
+                            {
+                                BackFile = 0,
+                                BackImage = (int)(reader.ReadInt32() ^ 0xAA38AA38),
+                                MiddleFile = 1,
+                                MiddleImage = (short)(reader.ReadInt16() ^ xor),
+                                FrontImage = (short)(reader.ReadInt16() ^ xor),
+                                DoorIndex = reader.ReadByte(),
+                                DoorOffset = reader.ReadByte(),
+                                FrontAnimationFrame = reader.ReadByte(),
+                                FrontAnimationTick = reader.ReadByte(),
+                                FrontFile = (short)(reader.ReadByte() + 2),
+                                Light = reader.ReadByte(),
+                                Flag = reader.ReadBoolean(),
+                            };
+                            reader.ReadByte();
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+        }
+
+        public void LoadMapType2(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+
+                    mStream.Seek(52, SeekOrigin.Begin);
+                    Cells = new Cell[Width, Height];
+
+                    for (int x = 0; x < Width / 2; x++)
+                    {
+                        for (int y = 0; y < Height / 2; y++)
+                        {
+                            Cells[x, y] = new Cell();
+                            Cells[x, y].BackImage = reader.ReadInt16();
+                            Cells[x, y].MiddleImage = reader.ReadInt16();
+                            Cells[x, y].FrontImage = reader.ReadInt16();
+                            Cells[x, y].DoorIndex = reader.ReadByte();
+                            Cells[x, y].DoorOffset = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationTick = reader.ReadByte();
+                            Cells[x, y].FrontFile = (short)(reader.ReadByte() + 120);
+                            Cells[x, y].Light = reader.ReadByte();
+                            Cells[x, y].BackFile = (short)(reader.ReadByte() + 100);
+                            Cells[x, y].MiddleFile = (short)(reader.ReadByte() + 110);
+                            if ((Cells[x, y].BackImage & 0x8000) != 0)
+                                Cells[x, y].BackImage = (Cells[x, y].BackImage & 0x7FFF) | 0x20000000;
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                SEnvir.Log(ex.ToString());
+            }
+
+        }
+
+        public void LoadMapType3(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+
+                    mStream.Seek(52, SeekOrigin.Begin);
+                    Cells = new Cell[Width, Height];
+
+                    for (int x = 0; x < Width; x++)
+                    {
+                        for (int y = 0; y < Height; y++)
+                        {//36
+                            Cells[x, y] = new Cell();
+                            Cells[x, y].BackImage = reader.ReadInt16();
+                            Cells[x, y].MiddleImage = reader.ReadInt16();
+                            Cells[x, y].FrontImage = reader.ReadInt16();
+                            Cells[x, y].DoorIndex = reader.ReadByte();
+                            Cells[x, y].DoorOffset = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationTick = reader.ReadByte();
+                            Cells[x, y].FrontFile = (short)(reader.ReadByte() + 120);
+                            Cells[x, y].Light = reader.ReadByte();
+                            Cells[x, y].BackFile = (short)(reader.ReadByte() + 100);
+                            Cells[x, y].MiddleFile = (short)(reader.ReadByte() + 110);
+                            Cells[x, y].TileAnimationImage = reader.ReadInt16();
+                            //2bytes from tileanimframe, 2 bytes always blank?, 2bytes potentialy 'backtiles index', 1byte fileindex for the backtiles?
+                            mStream.Seek(5, SeekOrigin.Current);
+                            Cells[x, y].TileAnimationFrames = reader.ReadByte();
+                            Cells[x, y].TileAnimationOffset = reader.ReadInt16();
+                            mStream.Seek(12, SeekOrigin.Current);
+                            if ((Cells[x, y].BackImage & 0x8000) != 0)
+                                Cells[x, y].BackImage = (Cells[x, y].BackImage & 0x7FFF) | 0x20000000;
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                //  if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+        }
+
+        public void LoadMapType4(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    mStream.Seek(31, SeekOrigin.Begin);
+                    int w = reader.ReadInt16();
+                    int xor = reader.ReadInt16();
+                    int h = reader.ReadInt16();
+                    Width = w ^ xor;
+                    Height = h ^ xor;
+
+                    Cells = new Cell[Width, Height];
+                    mStream.Seek(64, SeekOrigin.Begin);
+
+                    for (int x = 0; x < Width; x++)
+                    {
+                        for (int y = 0; y < Height; y++)
+                        {//12
+                            Cells[x, y] = new Cell();
+                            Cells[x, y].BackFile = 0;
+                            Cells[x, y].MiddleFile = 1;
+                            Cells[x, y].BackImage = (short)(reader.ReadInt16() ^ xor);
+                            Cells[x, y].MiddleImage = (short)(reader.ReadInt16() ^ xor);
+                            Cells[x, y].FrontImage = (short)(reader.ReadInt16() ^ xor);
+                            Cells[x, y].DoorIndex = reader.ReadByte();
+                            Cells[x, y].DoorOffset = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationTick = reader.ReadByte();
+                            Cells[x, y].FrontFile = (short)(reader.ReadByte() + 2);
+                            Cells[x, y].Light = reader.ReadByte();
+                            if ((Cells[x, y].BackImage & 0x8000) != 0)
+                                Cells[x, y].BackImage = (Cells[x, y].BackImage & 0x7FFF) | 0x20000000;
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+        }
+
+        public void LoadMapType5(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    byte flag = 0;
+                    mStream.Seek(16, SeekOrigin.Begin);
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+                    Cells = new Cell[Width, Height];
+                    mStream.Seek(40, SeekOrigin.Begin);
+                    for (int x = 0; x < Width; x++)
+                    {
+                        for (int y = 0; y < Height; y++)
+                        {
+                            Cells[x, y] = new Cell();
+                            flag = reader.ReadByte();
+                            Cells[x, y].BackFile = (short)(reader.ReadByte() != 255 ? reader.ReadByte() + 300 : -1);
+                            Cells[x, y].MiddleFile = (short)(reader.ReadByte() != 255 ? reader.ReadByte() + 300 : -1);
+                            Cells[x, y].FrontFile = (short)(reader.ReadByte() != 255 ? reader.ReadByte() + 300 : -1);
+                            Cells[x, y].BackImage = (short)(reader.ReadInt16() + 1);
+                            Cells[x, y].MiddleImage = (short)(reader.ReadInt16() + 1);
+                            Cells[x, y].FrontImage = (short)(reader.ReadInt16() + 1);
+                            if ((Cells[x, y].FrontImage == 1) && (Cells[x, y].FrontFile == 200))
+                                Cells[x, y].FrontFile = -1;
+                            Cells[x, y].MiddleAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte() == 255 ? (byte)0 : reader.ReadByte();
+                            if (Cells[x, y].FrontAnimationFrame > 0x0F)//assuming shanda used same value not sure
+                                Cells[x, y].FrontAnimationFrame = (byte)(/*0x80 ^*/ (Cells[x, y].FrontAnimationFrame & 0x0F));
+                            Cells[x, y].MiddleAnimationTick = 1;
+                            Cells[x, y].FrontAnimationTick = 1;
+                            Cells[x, y].Light = (byte)(reader.ReadByte() & 0x0F);
+                            Cells[x, y].Light *= 4;//far wants all light on mir3 maps to be maxed :p
+                            if ((flag & 0x01) != 1) Cells[x, y].BackImage |= 0x20000000;
+                            if ((flag & 0x02) != 2) Cells[x, y].FrontImage = (short)((UInt16)Cells[x, y].FrontImage | 0x8000);
+                            mStream.Seek(7, SeekOrigin.Current);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+
+        }
+
+        public void LoadMapType6(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    mStream.Seek(21, SeekOrigin.Begin);
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+                    Cells = new Cell[Width, Height];
+
+                    mStream.Seek(54, SeekOrigin.Begin);
+
+                    for (int x = 0; x < Width; x++)
+                    {
+                        for (int y = 0; y < Height; y++)
+                        {//total 15
+                            Cells[x, y] = new Cell
+                            {
+                                BackFile = 0,
+                                BackImage = reader.ReadInt32(),
+                                MiddleFile = 1,
+                                MiddleImage = reader.ReadInt16(),
+                                FrontImage = reader.ReadInt16(),
+                                DoorIndex = reader.ReadByte(),
+                                DoorOffset = reader.ReadByte(),
+                                FrontAnimationFrame = reader.ReadByte(),
+                                FrontAnimationTick = reader.ReadByte(),
+                                FrontFile = (short)(reader.ReadByte() + 2),
+                                Light = reader.ReadByte(),
+                                Flag = reader.ReadBoolean(),
+                            };
+                            if ((Cells[x, y].BackImage & 0x8000) != 0)
+                                Cells[x, y].BackImage = (Cells[x, y].BackImage & 0x7FFF) | 0x20000000;
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+        }
+
+        public void LoadMapType7(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    if ((reader.ReadByte() != 1) || (reader.ReadByte() != 0)) return;//only support version 1 atm
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+                    Cells = new Cell[Width, Height];
+                    mStream.Seek(8, SeekOrigin.Begin);
+                    for (int x = 0; x < Width; x++)
+                        for (int y = 0; y < Height; y++)
+                        {
+                            Cells[x, y] = new Cell();
+                            Cells[x, y].BackFile = reader.ReadInt16();
+
+                            //--------------------------------------------------------------------------
+                            //old
+                            //MapCells[x, y].BackImage = (short)BitConverter.ToInt16(Bytes, offset);
+
+                            //new
+                            Cells[x, y].BackImage = reader.ReadInt32();
+                            //----------------------------------------------------------------------------
+
+                            Cells[x, y].MiddleFile = reader.ReadInt16();
+                            Cells[x, y].MiddleImage = reader.ReadInt16();
+                            Cells[x, y].FrontFile = reader.ReadInt16();
+                            Cells[x, y].FrontImage = reader.ReadInt16();
+                            Cells[x, y].DoorIndex = reader.ReadByte();
+                            Cells[x, y].DoorOffset = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationTick = reader.ReadByte();
+                            Cells[x, y].MiddleAnimationFrame = reader.ReadByte();
+                            Cells[x, y].MiddleAnimationTick = reader.ReadByte();
+                            Cells[x, y].TileAnimationImage = reader.ReadInt16();
+                            Cells[x, y].TileAnimationOffset = reader.ReadInt16();
+                            Cells[x, y].TileAnimationFrames = reader.ReadByte();
+                            Cells[x, y].Light = reader.ReadByte();
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                }
+            }
+            catch (Exception)
+            {
+                //if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+        }
+
+        public void LoadMapType8(string fileName)
+        {
+            try
+            {
+                if (!File.Exists(Config.MapPath + fileName + ".map")) return;
+
+                using (MemoryStream mStream = new MemoryStream(File.ReadAllBytes(Config.MapPath + fileName + ".map")))
+                using (BinaryReader reader = new BinaryReader(mStream))
+                {
+                    Width = reader.ReadInt16();
+                    Height = reader.ReadInt16();
+                    Cells = new Cell[Width, Height];
+                    mStream.Seek(52, SeekOrigin.Begin);
+                    for (int x = 0; x < Width; x++)
+                        for (int y = 0; y < Height; y++)
+                        {//12
+                            Cells[x, y] = new Cell();
+                            Cells[x, y].BackFile = 0;
+                            Cells[x, y].MiddleFile = 1;
+                            Cells[x, y].BackImage = reader.ReadInt16();
+                            Cells[x, y].MiddleImage = reader.ReadInt16();
+                            Cells[x, y].FrontImage = reader.ReadInt16();
+                            Cells[x, y].DoorIndex = reader.ReadByte();
+                            Cells[x, y].DoorOffset = reader.ReadByte();
+                            Cells[x, y].FrontAnimationFrame = reader.ReadByte();
+                            Cells[x, y].FrontAnimationTick = reader.ReadByte();
+                            Cells[x, y].FrontFile = (short)(reader.ReadByte() + 2);
+                            Cells[x, y].Light = reader.ReadByte();
+                            if ((Cells[x, y].BackImage & 0x8000) != 0)
+                                Cells[x, y].BackImage = (Cells[x, y].BackImage & 0x7FFF) | 0x20000000;
+
+                            if (Cells[x, y].Light == 100 || Cells[x, y].Light == 101)
+                                Cells[x, y].FishingCell = true;
+                        }
+                }
+            }
+            catch (Exception)
+            {
+                //if (Settings.LogErrors) CMain.SaveError(ex.ToString());
+            }
+
+        }
+
+        public void LoadMapTypeDefault(string fileName)
         {
             try
             {
@@ -2232,9 +2708,16 @@ namespace Server.Views.DirectX
             public int MiddleAnimationFrame;
             public int MiddleAnimationTick;
 
-            public int Light;
+            public short TileAnimationImage;
+            public short TileAnimationOffset;
+            public byte TileAnimationFrames;
 
+            public byte DoorIndex;
+            public byte DoorOffset;
+
+            public int Light;
             public bool Flag;
+            public bool FishingCell;
         }
 
     }

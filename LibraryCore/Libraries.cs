@@ -23,7 +23,7 @@ namespace Library
             [LibraryFile.NPC] = @"Data\NPC.Zl",
             [LibraryFile.GameInter2] = @"Data\GameInter2.Zl",
             [LibraryFile.MiniMap] = @"Data\MiniMap.Zl",
-            
+
             [LibraryFile.MagicIcon] = @"Data\MIcon.Zl",
             [LibraryFile.CBIcon] = @"Data\CBIcons.Zl",
 
@@ -93,7 +93,7 @@ namespace Library
             [LibraryFile.M_Weapon14] = @"Data\M-Weapon14.Zl",
             [LibraryFile.M_Weapon15] = @"Data\M-Weapon15.Zl",
             [LibraryFile.M_Weapon16] = @"Data\M-Weapon16.Zl",
-            
+
             [LibraryFile.WM_Weapon1] = @"Data\WM-Weapon1.Zl",
             [LibraryFile.WM_Weapon2] = @"Data\WM-Weapon2.Zl",
             [LibraryFile.WM_Weapon3] = @"Data\WM-Weapon3.Zl",
@@ -146,7 +146,7 @@ namespace Library
             [LibraryFile.M_Helmet3] = @"Data\M-Helmet3.Zl",
             [LibraryFile.M_Helmet4] = @"Data\M-Helmet4.Zl",
             [LibraryFile.M_Helmet5] = @"Data\M-Helmet5.Zl",
-            
+
             [LibraryFile.M_Helmet11] = @"Data\M-Helmet11.Zl",
             [LibraryFile.M_Helmet12] = @"Data\M-Helmet12.Zl",
             [LibraryFile.M_Helmet13] = @"Data\M-Helmet13.Zl",
@@ -256,7 +256,7 @@ namespace Library
             [LibraryFile.Mon_54] = @"Data\Mon-54.Zl",
             [LibraryFile.Mon_55] = @"Data\Mon-55.Zl",
             [LibraryFile.Mon_56] = @"Data\Mon-56.Zl",
-            
+
             [LibraryFile.Magic] = @"Data\Magic.Zl",
             [LibraryFile.MagicEx] = @"Data\MagicEx.Zl",
             [LibraryFile.MagicEx2] = @"Data\MagicEx2.Zl",
@@ -267,7 +267,7 @@ namespace Library
             [LibraryFile.MagicEx7] = @"Data\MagicEx7.Zl",
             [LibraryFile.MagicEx8] = @"Data\MagicEx8.Zl",
             [LibraryFile.MagicEx9] = @"Data\MagicEx9.Zl",
-            
+
             [LibraryFile.Animationsc] = @"Data\Map Data\Animationsc.Zl",
             [LibraryFile.Cliffsc] = @"Data\Map Data\Cliffsc.Zl",
             [LibraryFile.Dungeonsc] = @"Data\Map Data\Dungeonsc.Zl",
@@ -336,6 +336,8 @@ namespace Library
             [LibraryFile.Wood_Tilesc] = @"Data\Map Data\Wood\Tilesc.Zl",
             [LibraryFile.Wood_Wallsc] = @"Data\Map Data\Wood\Wallsc.Zl",
 
+            [LibraryFile.Objects98] = @"Data\Map Data\Wood\Objects98.Zl",
+            [LibraryFile.smTiles98] = @"Data\Map Data\Wood\smTiles98.Zl",
         };
 
         public static Dictionary<int, LibraryFile> KROrder = new Dictionary<int, LibraryFile>
@@ -410,6 +412,9 @@ namespace Library
             [69] = LibraryFile.Forest_Wallsc,
             [70] = LibraryFile.Forest_SmObjectsc,
             [71] = LibraryFile.Forest_Animationsc,
+
+            [72] = LibraryFile.Objects98,
+            [73] = LibraryFile.smTiles98,
         };
     }
 
@@ -733,5 +738,8 @@ namespace Library
         Wood_Tiles30c,
         Wood_Tilesc,
         Wood_Wallsc,
+
+        Objects98,
+        smTiles98,
     }
 }
